@@ -34,6 +34,8 @@ class WeiXinData(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
     # processed_marker = Column(String(64))
 
 class WeiXinOilCross(Base):
@@ -49,7 +51,8 @@ class WeiXinOilCross(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
-
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 class WeiXinLngCon(Base):
     __tablename__ = 'weixin_lng_con'
 
@@ -63,6 +66,8 @@ class WeiXinLngCon(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 class WeiXinCnpcNews(Base):
     __tablename__ = 'weixin_cnpc_news'
@@ -77,6 +82,8 @@ class WeiXinCnpcNews(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 
 
@@ -93,6 +100,8 @@ class WeiXinPetroTrading(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 class WeiXinEnergyExpress(Base):
     __tablename__ = 'weixin_energy_express'
@@ -107,6 +116,8 @@ class WeiXinEnergyExpress(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 
 class WeiXinHaiBei(Base):
@@ -122,6 +133,8 @@ class WeiXinHaiBei(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 
 class WeiXinOffshoreEnergy(Base):
@@ -137,6 +150,8 @@ class WeiXinOffshoreEnergy(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 
 class WeiXinHaiBo(Base):
@@ -152,6 +167,8 @@ class WeiXinHaiBo(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 
 class WeiXinCRSL(Base):
@@ -167,7 +184,8 @@ class WeiXinCRSL(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
-
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 class WeiXinOilCubic(Base):
     __tablename__ = 'weixin_oil_cubic'
@@ -182,6 +200,8 @@ class WeiXinOilCubic(Base):
     categories = Column(String(255))
     crawl_time = Column(String(255))
     url = Column(String(255))
+    images_url = Column(String(2048))
+    images = Column(String(4096))
 
 
 class WeiXinOilLink(Base):
