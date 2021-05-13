@@ -6,23 +6,23 @@
 import scrapy
 
 
-class WeixinItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-
-    # define the fields for your item here like:
-    preview_img_link = scrapy.Field()
-    url = scrapy.Field()
-    pre_title = scrapy.Field()
-    title = scrapy.Field()
-    # title = scrapy.Field()
-    # sub_title = scrapy.Field()
-    content = scrapy.Field()
-    # img_content = scrapy.Field()
-    categories = scrapy.Field()
-    pub_time = scrapy.Field()
-    author = scrapy.Field()
-    crawl_time = scrapy.Field()
+# class WeixinItem(scrapy.Item):
+#     # define the fields for your item here like:
+#     # name = scrapy.Field()
+#
+#     # define the fields for your item here like:
+#     preview_img_link = scrapy.Field()
+#     url = scrapy.Field()
+#     pre_title = scrapy.Field()
+#     title = scrapy.Field()
+#     # title = scrapy.Field()
+#     # sub_title = scrapy.Field()
+#     content = scrapy.Field()
+#     # img_content = scrapy.Field()
+#     categories = scrapy.Field()
+#     pub_time = scrapy.Field()
+#     author = scrapy.Field()
+#     crawl_time = scrapy.Field()
 
 class OilLinkItem(scrapy.Item):
     # define the fields for your item here like:
@@ -46,61 +46,61 @@ class OilLinkItem(scrapy.Item):
     author = scrapy.Field()
     crawl_time = scrapy.Field()
 
-class OilCrossItem(WeixinItem):
+class OilCrossItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class LngConItem(WeixinItem):
+class LngConItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class CnpcNewsItem(WeixinItem):
+class CnpcNewsItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class EnergyExpressItem(WeixinItem):
+class EnergyExpressItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class PetroTradingItem(WeixinItem):
+class PetroTradingItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class HaiBeiItem(WeixinItem):
+class HaiBeiItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class OffshoreEnergyItem(WeixinItem):
+class OffshoreEnergyItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class HaiBoItem(WeixinItem):
+class HaiBoItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class CRSLItem(WeixinItem):
+class CRSLItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 
     # define the fields for your item here like:
     pass
-class OilCubicItem(WeixinItem):
+class OilCubicItem(OilLinkItem):
     # define the fields for your item here like:
     # name = scrapy.Field()
 

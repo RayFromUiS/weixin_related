@@ -187,7 +187,7 @@ class WeChatParams:
         # article_params = self.article_params
         results = []
 
-        for i in range(10,15,1):
+        for i in range(9,15,1):
             article_params = self.article_params
             article_params['begin'] = 5*i
             try:

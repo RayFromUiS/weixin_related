@@ -23,71 +23,72 @@ import pymongo
 from scrapy.utils.project import get_project_settings
 
 
-
-class PublicSpider(scrapy.Spider):
-    name = 'public'
-    # start_urls = []
-    query_names = [('cnpc_news', '中国石油报'), ('energy_express', '能源快讯'), ('petro_trading', '石油商报'),
-                   ('haibei', '海贝能源'), ('offshore_energy', '海洋能源与工程咨询平台'), ('haibo', '海波谈LNG'),
-                   ('crsl', '克拉克森研究CRSL'), ('oil_cubic', '石油圈'), ('oil_link', '石油link'),
-                   ('oil_cross', '油气经纬'), ('lng_con', '天然气咨询')]
-
-    def __init__(self):
-        """
-        Initializes database connection and sessionmaker.
-        Creates deals table.
-        """
-        self.engine = db_connect()
-        Session = sessionmaker(bind=self.engine)
-        self.session = Session()
-        create_table(self.engine)
-        # self.mysql_db = 'WeiXinData'
-        self.mongo_uri = get_project_settings().get('MONGO_URI')
-        self.mongo_db = get_project_settings().get('MONGO_DATABASE_WECHAT')
-        self.collection = 'public_wechat'
-        self.client = pymongo.MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
-
-    def start_requests(self):
-        '''request url from database'''
-        docs = self.db[self.collection].find()
-
-        for doc in docs:
-
-            url = doc.get('link')
-            # print(url)
-            result = self.session.query(WeiXinData) \
-                .filter(WeiXinData.url == url) \
-                .first()
-            if not result:
-                yield SeleniumRequest(url=url,
-                                      callback=self.parse,
-                                      wait_time=30,
-                                      wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
-                                      )
-    def parse(self, response):
-        # from scrapy.shell import puinspect_response
-        # inspect_response(response,self)
-        item = WeixinItem()
-        item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
-        item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
-        item['preview_img_link'] = None
-        item['pre_title'] = None
-        item['content'] = response.css('div#js_content').get()
-        item['categories'] = None
-        item['crawl_time'] = datetime.now().strftime('%m/%d/%Y %H:%M')
-
-        yield item
+#
+# class PublicSpider(scrapy.Spider):
+#     name = 'public'
+#     # start_urls = []
+#     query_names = [('cnpc_news', '中国石油报'), ('energy_express', '能源快讯'), ('petro_trading', '石油商报'),
+#                    ('haibei', '海贝能源'), ('offshore_energy', '海洋能源与工程咨询平台'), ('haibo', '海波谈LNG'),
+#                    ('crsl', '克拉克森研究CRSL'), ('oil_cubic', '石油圈'), ('oil_link', '石油link'),
+#                    ('oil_cross', '油气经纬'), ('lng_con', '天然气咨询')]
+#
+#     def __init__(self):
+#         """
+#         Initializes database connection and sessionmaker.
+#         Creates deals table.
+#         """
+#         self.engine = db_connect()
+#         Session = sessionmaker(bind=self.engine)
+#         self.session = Session()
+#         create_table(self.engine)
+#         # self.mysql_db = 'WeiXinData'
+#         self.mongo_uri = get_project_settings().get('MONGO_URI')
+#         self.mongo_db = get_project_settings().get('MONGO_DATABASE_WECHAT')
+#         self.collection = 'public_wechat'
+#         self.client = pymongo.MongoClient(self.mongo_uri)
+#         self.db = self.client[self.mongo_db]
+#
+#     def start_requests(self):
+#         '''request url from database'''
+#         docs = self.db[self.collection].find()
+#
+#         for doc in docs:
+#
+#             url = doc.get('link')
+#             # print(url)
+#             result = self.session.query(WeiXinData) \
+#                 .filter(WeiXinData.url == url) \
+#                 .first()
+#             if not result:
+#                 yield SeleniumRequest(url=url,
+#                                       callback=self.parse,
+#                                       wait_time=30,
+#                                       wait_until=EC.presence_of_element_located(
+#                                           (By.ID, 'js_content'))
+#                                       )
+#     def parse(self, response):
+#         # from scrapy.shell import puinspect_response
+#         # inspect_response(response,self)
+#         item = WeixinItem()
+#         item['url'] = response.url
+#         item['author'] = response.css('span#profileBt a::text').get().strip()
+#         item['title'] = response.css('h2#activity-name::text').get().strip()
+#         item['pub_time'] = response.css('em#publish_time::text').get()
+#         item['preview_img_link'] = None
+#         item['pre_title'] = None
+#         item['content'] = response.css('div#js_content').get()
+#         item['categories'] = None
+#         item['crawl_time'] = datetime.now().strftime('%m/%d/%Y %H:%M')
+#
+#         yield item
 
 
 class  OilCrossSpider(scrapy.Spider):
     name = 'oil_cross'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinOilCrossPipeline': 301},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinOilCrossPipeline': 301,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
     def __init__(self):
         self.engine = db_connect()
@@ -127,6 +128,7 @@ class  OilCrossSpider(scrapy.Spider):
         item['preview_img_link'] = None
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['categories'] = None
         item['crawl_time'] = datetime.now().strftime('%m/%d/%Y %H:%M')
 
@@ -137,7 +139,8 @@ class  LngConSpider(scrapy.Spider):
     name = 'lng_con'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinLngConPipeline': 302},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinLngConPipeline': 302,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -174,6 +177,7 @@ class  LngConSpider(scrapy.Spider):
         item['author'] = response.css('span#profileBt a::text').get().strip()
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['preview_img_link'] = None
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
@@ -186,7 +190,8 @@ class  CnpcNewsSpider(scrapy.Spider):
     name = 'cnpc_news'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinCnpcNewsPipeline': 303},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinCnpcNewsPipeline': 303,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -224,6 +229,7 @@ class  CnpcNewsSpider(scrapy.Spider):
         item['author'] = response.css('span#profileBt a::text').get().strip()
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['preview_img_link'] = None
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
@@ -237,7 +243,8 @@ class  PetroTradingSpider(scrapy.Spider):
     name = 'petro_trading'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinPetroTradingPipeline': 304},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinPetroTradingPipeline': 304,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -273,6 +280,7 @@ class  PetroTradingSpider(scrapy.Spider):
         item = PetroTradingItem()
         item['url'] = response.url
         item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
         item['preview_img_link'] = None
@@ -288,7 +296,8 @@ class  EnergyExpressSpider(scrapy.Spider):
     name = 'energy_express'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinEnergyExpressPipeline': 305},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinEnergyExpressPipeline': 305,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -325,6 +334,7 @@ class  EnergyExpressSpider(scrapy.Spider):
         item['url'] = response.url
         item['author'] = response.css('span#profileBt a::text').get().strip()
         item['title'] = response.css('h2#activity-name::text').get().strip()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pub_time'] = response.css('em#publish_time::text').get()
         item['preview_img_link'] = None
         item['pre_title'] = None
@@ -340,7 +350,8 @@ class  HaiBeiSpider(scrapy.Spider):
     name = 'haibei'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinHaiBeiPipeline': 306},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinHaiBeiPipeline': 306,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -378,6 +389,7 @@ class  HaiBeiSpider(scrapy.Spider):
         item['author'] = response.css('span#profileBt a::text').get().strip()
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['preview_img_link'] = None
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
@@ -390,7 +402,8 @@ class  WeiXinOffshoreEnergySpider(scrapy.Spider):
     name = 'offshore_energy'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinOffshoreEnergyPipeline': 307},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinOffshoreEnergyPipeline': 307,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -426,6 +439,7 @@ class  WeiXinOffshoreEnergySpider(scrapy.Spider):
         item = OffshoreEnergyItem()
         item['url'] = response.url
         item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
         item['preview_img_link'] = None
@@ -442,7 +456,8 @@ class  HaiBoSpider(scrapy.Spider):
     name = 'haibo'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinHaiBoPipeline': 308},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinHaiBoPipeline': 308,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -481,6 +496,7 @@ class  HaiBoSpider(scrapy.Spider):
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -492,7 +508,8 @@ class  CRSLSpider(scrapy.Spider):
     name = 'crsl'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinCRSLPipeline': 309},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinCRSLPipeline': 309,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -530,6 +547,7 @@ class  CRSLSpider(scrapy.Spider):
         item['author'] = response.css('span#profileBt a::text').get().strip()
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['preview_img_link'] = None
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
@@ -543,7 +561,8 @@ class  OilCubicSpider(scrapy.Spider):
     name = 'oil_cubic'
 
     custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinOilCubicPipeline': 310},
+        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinOilCubicPipeline': 310,
+                           'scrapy.pipelines.images.ImagesPipeline': 1},
     }
 
     def __init__(self):
@@ -581,6 +600,7 @@ class  OilCubicSpider(scrapy.Spider):
         item['title'] = response.css('h2#activity-name::text').get().strip()
         item['pub_time'] = response.css('em#publish_time::text').get()
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -644,55 +664,6 @@ class  OilLinkSpider(scrapy.Spider):
         yield item
 
 
-class  ImageDownloaderSpider(scrapy.Spider):
-    name = 'img_downloader'
-
-    custom_settings = {
-        'ITEM_PIPELINES': {'weixin.pipelines.WeiXinOilLinkPipeline': 311},
-    }
-
-    def __init__(self):
-        self.engine = db_connect()
-        Session = sessionmaker(bind=self.engine)
-        self.session = Session()
-        create_table(self.engine)
-        # self.mysql_db = 'WeiXinData'
-        self.mongo_uri = get_project_settings().get('MONGO_URI')
-        self.mongo_db = get_project_settings().get('MONGO_DATABASE_WECHAT')
-        self.collection = 'oil_link'
-        self.client = pymongo.MongoClient(self.mongo_uri)
-        self.db = self.client[self.mongo_db]
-    def start_requests(self):
-        docs = self.db[self.collection].find()
-        for doc in docs:
-
-            url = doc.get('link').strip()
-            title = doc.get('title')
-            # print(url)
-            result = self.session.query(WeiXinOilLink) \
-                .filter(or_(WeiXinOilLink.url == url,WeiXinOilLink.title == title)) \
-                .first()
-            if not result:
-                yield SeleniumRequest(url=url,
-                                      callback=self.parse,
-                                      wait_time=30,
-                                      wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
-                                      )
-
-    def parse(self, response):
-        item = OilLinkItem()
-        item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
-        item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
-        item['pre_title'] = None
-        item['content'] = response.css('div#js_content').get()
-        # item['images'] =
-        item['crawl_time'] = datetime.now().strftime('%m/%d/%Y %H:%M')
-
-        yield item
 
 
 
