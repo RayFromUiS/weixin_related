@@ -116,7 +116,7 @@ class  OilCrossSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -168,7 +168,7 @@ class  LngConSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -220,7 +220,7 @@ class  CnpcNewsSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -273,7 +273,7 @@ class  PetroTradingSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -326,7 +326,7 @@ class  EnergyExpressSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -380,7 +380,7 @@ class  HaiBeiSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -432,7 +432,7 @@ class  WeiXinOffshoreEnergySpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -486,7 +486,7 @@ class  HaiBoSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -538,7 +538,7 @@ class  CRSLSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -590,7 +590,7 @@ class  OilCubicSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):
@@ -645,7 +645,7 @@ class  OilLinkSpider(scrapy.Spider):
                                       callback=self.parse,
                                       wait_time=30,
                                       wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_content'))
+                                          (By.ID, 'js_article'))
                                       )
 
     def parse(self, response):

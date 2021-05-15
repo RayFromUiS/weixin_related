@@ -178,7 +178,7 @@ class WeChatParams:
 
         # print(res.json())
         if res.status_code == 200:
-            print(res.json())
+            # print(res.json())
             self.app_sums = res.json().get('app_msg_cnt')
         else:
             print(res.json)
@@ -187,7 +187,7 @@ class WeChatParams:
         # article_params = self.article_params
         results = []
 
-        for i in range(9,15,1):
+        for i in range(0,1,1): ##15 until 25
             article_params = self.article_params
             article_params['begin'] = 5*i
             try:
@@ -202,17 +202,19 @@ class WeChatParams:
                 if article_list:
                     for item in article_list:
                         result = self.db[self.collection].find_one({'title': item.get('title')})
-                        print('the item is',item, '/n')
+                        # print('the item is',item, '/n')
                           # <-- should return: True
                         # result_and = self.db[self.collection].find_one({'title': item.get('title')})
                         results.append(result)
                         if not result :
                             insert_one = self.db[self.collection].insert_one(item)
                             print(insert_one.acknowledged)
+
+                            print(item)
                             self.links.append(item.get('link'))
 
-                        else:
-                            continue
+                        # else:
+                        #     continue
             except:
                 continue
 

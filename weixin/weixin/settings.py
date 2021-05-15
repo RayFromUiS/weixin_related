@@ -94,7 +94,7 @@ SQL_DB_NAME = 'news_oil'
 MONGO_URI = 'mongodb://root:jinzheng1706@139.198.191.224:27017/'
 MONGO_DATABASE_WECHAT = 'wechat'
 
-IMAGES_STORE = '/mnt/weixin_images'
+IMAGES_STORE = 'root1/mnt/weixin_images'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'weixin (+http://www.yourdomain.com)'
 #
