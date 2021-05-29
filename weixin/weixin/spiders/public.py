@@ -5,11 +5,12 @@ import time
 from datetime import datetime
 import scrapy
 from weixin.items import  OilCrossItem,LngConItem,CnpcNewsItem,EnergyExpressItem,PetroTradingItem,\
-                        HaiBeiItem,OffshoreEnergyItem,HaiBoItem,CRSLItem,OilCubicItem,OilLinkItem
+                        HaiBeiItem,OffshoreEnergyItem,HaiBoItem,CRSLItem,OilCubicItem,OilLinkItem,WinTuboItem
 from weixin.model import db_connect,create_table,WeiXinData,WeiXinOilCross,WeiXinLngCon,WeiXinCnpcNews,WeiXinEnergyExpress, \
                         WeiXinPetroTrading,WeiXinHaiBei,WeiXinOffshoreEnergy,WeiXinHaiBo,WeiXinCRSL, \
                         WeiXinOilCubic,WeiXinOilLink
 from scrapy.http import HtmlResponse
+from weixin.win_tub import get_basic
 from scrapy_selenium import SeleniumRequest
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -206,21 +207,12 @@ class  CnpcNewsSpider(scrapy.Spider):
         self.client = pymongo.MongoClient(self.mongo_uri)
         self.db = self.client[self.mongo_db]
     def start_requests(self):
-        docs = self.db[self.collection].find()
-        for doc in docs:
-
-            url = doc.get('link')
-            title = doc.get('title')
-            # print(url)
-            result = self.session.query(WeiXinCnpcNews) \
-                .filter(or_(WeiXinCnpcNews.url == url,WeiXinCnpcNews.title == title)) \
-                .first()
-            if not result:
-                yield SeleniumRequest(url=url,
-                                      callback=self.parse,
-                                      wait_time=30,
-                                      wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_article'))
+        df = get_basic()
+        for row in df.itertuples():
+            url = row.detail_url
+            if url:
+                yield scrapy.Request(url=url,
+                                      callback=self.parse
                                       )
 
     def parse(self, response):
@@ -649,11 +641,21 @@ class  OilLinkSpider(scrapy.Spider):
                                       )
 
     def parse(self, response):
+        # from scrapy.shell import inspect_response
+        # inspect_response(response,self)
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
+        # time_element.screenshot('time.png')
         item = OilLinkItem()
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+                            if response.css('span#proshfileBt a::text') else  \
+                            response.css('span.rich_media_meta_text::text').get().strip()
+
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+                            else time_element.text
         item['preview_img_link'] = None
         item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
@@ -664,8 +666,45 @@ class  OilLinkSpider(scrapy.Spider):
         yield item
 
 
-
-
-
-
-
+# class WinTuboSpider(scrapy.Spider):
+#     name = 'win_tubro'
+#
+#     custom_settings = {
+#         'ITEM_PIPELINES': {'weixin.pipelines.WindTuboPipeline': 312,
+#                            # 'scrapy.pipelines.images.ImagesPipeline': 1,
+#                            },
+#     }
+#
+#     # def __init__(self):
+#     #     self.engine = db_connect()
+#     #     Session = sessionmaker(bind=self.engine)
+#     #     self.session = Session()
+#     #     create_table(self.engine)
+#     #     # self.mysql_db = 'WeiXinData'
+#     #     self.mongo_uri = get_project_settings().get('MONGO_URI')
+#     #     self.mongo_db = get_project_settings().get('MONGO_DATABASE_WECHAT')
+#     #     self.collection = 'oil_link'
+#     #     self.client = pymongo.MongoClient(self.mongo_uri)
+#     #     self.db = self.client[self.mongo_db]
+#     def start_requests(self):
+#
+#         df = get_basic()
+#         for row in df.itertuples():
+#             url = row.detail_url
+#             preview_url = row.img
+#             if url:
+#                 yield scrapy.Request(url=url,
+#                                      callback=self.parse,cb_kwargs={'img':preview_url})
+#
+#     def parse(self, response,img):
+#         item = WinTuboItem()
+#         item['url'] = response.url
+#         # item['image_urls'] = response.css('span.thumbnail-container img::attr(src)').getall()
+#         # item['image_urls'].append(img)
+#         item['detail_related'] = response.css('div.TabContainer').get()
+#
+#         yield item
+#
+#
+#
+#
