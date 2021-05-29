@@ -5,13 +5,13 @@ import time
 from datetime import datetime
 import scrapy
 from weixin.items import  OilCrossItem,LngConItem,CnpcNewsItem,EnergyExpressItem,PetroTradingItem,\
-                        HaiBeiItem,OffshoreEnergyItem,HaiBoItem,CRSLItem,OilCubicItem,OilLinkItem,\
+                        HaiBeiItem,OffshoreEnergyItem,HaiBoItem,CRSLItem,OilCubicItem,OilLinkItem
                         # WinTuboItem
 from weixin.model import db_connect,create_table,WeiXinData,WeiXinOilCross,WeiXinLngCon,WeiXinCnpcNews,WeiXinEnergyExpress, \
                         WeiXinPetroTrading,WeiXinHaiBei,WeiXinOffshoreEnergy,WeiXinHaiBo,WeiXinCRSL, \
                         WeiXinOilCubic,WeiXinOilLink
 from scrapy.http import HtmlResponse
-from weixin.win_tub import get_basic
+# from weixin.win_tub import get_basic
 from scrapy_selenium import SeleniumRequest
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
