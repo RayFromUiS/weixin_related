@@ -5,7 +5,8 @@ import time
 from datetime import datetime
 import scrapy
 from weixin.items import  OilCrossItem,LngConItem,CnpcNewsItem,EnergyExpressItem,PetroTradingItem,\
-                        HaiBeiItem,OffshoreEnergyItem,HaiBoItem,CRSLItem,OilCubicItem,OilLinkItem,WinTuboItem
+                        HaiBeiItem,OffshoreEnergyItem,HaiBoItem,CRSLItem,OilCubicItem,OilLinkItem,\
+                        # WinTuboItem
 from weixin.model import db_connect,create_table,WeiXinData,WeiXinOilCross,WeiXinLngCon,WeiXinCnpcNews,WeiXinEnergyExpress, \
                         WeiXinPetroTrading,WeiXinHaiBei,WeiXinOffshoreEnergy,WeiXinHaiBo,WeiXinCRSL, \
                         WeiXinOilCubic,WeiXinOilLink
