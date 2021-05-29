@@ -122,14 +122,20 @@ class  OilCrossSpider(scrapy.Spider):
 
     def parse(self, response):
         item = OilCrossItem()
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+            if response.css('span#proshfileBt a::text') else \
+            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['categories'] = None
         item['crawl_time'] = datetime.now().strftime('%m/%d/%Y %H:%M')
 
@@ -174,12 +180,18 @@ class  LngConSpider(scrapy.Spider):
 
     def parse(self, response):
         item = LngConItem()
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+            if response.css('span#proshfileBt a::text') else \
+            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -217,12 +229,18 @@ class  CnpcNewsSpider(scrapy.Spider):
 
     def parse(self, response):
         item = CnpcNewsItem()
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+            if response.css('span#proshfileBt a::text') else \
+            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -270,12 +288,18 @@ class  PetroTradingSpider(scrapy.Spider):
 
     def parse(self, response):
         item = PetroTradingItem()
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+            if response.css('span#proshfileBt a::text') else \
+            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -323,12 +347,18 @@ class  EnergyExpressSpider(scrapy.Spider):
 
     def parse(self, response):
         item = EnergyExpressItem()
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+            if response.css('span#proshfileBt a::text') else \
+            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
-        item['pub_time'] = response.css('em#publish_time::text').get()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -377,12 +407,18 @@ class  HaiBeiSpider(scrapy.Spider):
 
     def parse(self, response):
         item = HaiBeiItem()
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+            if response.css('span#proshfileBt a::text') else \
+            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -429,12 +465,18 @@ class  WeiXinOffshoreEnergySpider(scrapy.Spider):
 
     def parse(self, response):
         item = OffshoreEnergyItem()
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+            if response.css('span#proshfileBt a::text') else \
+            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -483,10 +525,17 @@ class  HaiBoSpider(scrapy.Spider):
 
     def parse(self, response):
         item = HaiBoItem()
+
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+                            if response.css('span#proshfileBt a::text') else  \
+                            response.css('span.rich_media_meta_text::text').get().strip()
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+                            else time_element.text
         item['preview_img_link'] = None
         item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
@@ -535,12 +584,20 @@ class  CRSLSpider(scrapy.Spider):
 
     def parse(self, response):
         item = CRSLItem()
+
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+                            if response.css('span#proshfileBt a::text') else  \
+                            response.css('span.rich_media_meta_text::text').get().strip()
+
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
-        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+                            else time_element.text
         item['preview_img_link'] = None
+        item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
         item['content'] = response.css('div#js_content').get()
         item['categories'] = None
@@ -587,10 +644,18 @@ class  OilCubicSpider(scrapy.Spider):
 
     def parse(self, response):
         item = OilCubicItem()
+
+        driver = response.meta.get('driver')
+        time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#profileBt a::text').get().strip()
+        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
+                            if response.css('span#proshfileBt a::text') else  \
+                            response.css('span.rich_media_meta_text::text').get().strip()
+
+
         item['title'] = response.css('h2#activity-name::text').get().strip()
-        item['pub_time'] = response.css('em#publish_time::text').get()
+        item['pub_time'] = response.css('em#publish_time::text').get() if response.css('em#publish_time::text') \
+                            else time_element.text
         item['preview_img_link'] = None
         item['image_urls'] = response.css('div#js_content').css('img::attr(data-src)').getall()
         item['pre_title'] = None
@@ -641,12 +706,10 @@ class  OilLinkSpider(scrapy.Spider):
                                       )
 
     def parse(self, response):
-        # from scrapy.shell import inspect_response
-        # inspect_response(response,self)
+
+        item = OilLinkItem()
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
-        # time_element.screenshot('time.png')
-        item = OilLinkItem()
         item['url'] = response.url
         item['author'] = response.css('span#proshfileBt a::text').get().strip() \
                             if response.css('span#proshfileBt a::text') else  \
