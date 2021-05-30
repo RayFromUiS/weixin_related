@@ -646,8 +646,8 @@ class  OilCubicSpider(scrapy.Spider):
 
     def parse(self, response):
         item = OilCubicItem()
-        from scrapy.shell import inspect_response
-        inspect_response(response,self)
+        # from scrapy.shell import inspect_response
+        # inspect_response(response,self)
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
@@ -701,12 +701,13 @@ class  OilLinkSpider(scrapy.Spider):
                 .filter(or_(WeiXinOilLink.url == url,WeiXinOilLink.title == title)) \
                 .first()
             if not result:
-                yield SeleniumRequest(url=url,
-                                      callback=self.parse,
-                                      wait_time=30,
-                                      wait_until=EC.presence_of_element_located(
-                                          (By.ID, 'js_article'))
-                                      )
+        # url ="https://mp.weixin.qq.com/s?__biz=MzA4MTEyNDc3NA==&mid=2650374467&idx=1&sn=b3315d1fcd280207f25cd744bbd4c018&chksm=8794ed8ab0e3649cb125ef44434d94d35d8fca85846953242f7cc11d4963a2d275fde362dcb8#rd"
+                    yield SeleniumRequest(url=url,
+                              callback=self.parse,
+                              wait_time=30,
+                              wait_until=EC.presence_of_element_located(
+                                  (By.ID, 'js_article'))
+                              )
 
     def parse(self, response):
 
