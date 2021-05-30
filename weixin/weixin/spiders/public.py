@@ -126,8 +126,8 @@ class  OilCrossSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-            if response.css('span#proshfileBt a::text') else \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+            if response.css('span#profileBt a::text') else \
             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -184,8 +184,8 @@ class  LngConSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-            if response.css('span#proshfileBt a::text') else \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+            if response.css('span#profileBt a::text') else \
             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -233,8 +233,8 @@ class  CnpcNewsSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-            if response.css('span#proshfileBt a::text') else \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+            if response.css('span#profileBt a::text') else \
             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -292,8 +292,8 @@ class  PetroTradingSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-            if response.css('span#proshfileBt a::text') else \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+            if response.css('span#profileBt a::text') else \
             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -351,8 +351,8 @@ class  EnergyExpressSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-            if response.css('span#proshfileBt a::text') else \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+            if response.css('span#profileBt a::text') else \
             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -411,8 +411,8 @@ class  HaiBeiSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-            if response.css('span#proshfileBt a::text') else \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+            if response.css('span#profileBt a::text') else \
             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -469,8 +469,8 @@ class  WeiXinOffshoreEnergySpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-            if response.css('span#proshfileBt a::text') else \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+            if response.css('span#profileBt a::text') else \
             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -530,8 +530,8 @@ class  HaiBoSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-                            if response.css('span#proshfileBt a::text') else  \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+                            if response.css('span#profileBt a::text') else  \
                             response.css('span.rich_media_meta_text::text').get().strip()
 
         item['title'] = response.css('h2#activity-name::text').get().strip()
@@ -589,8 +589,8 @@ class  CRSLSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-                            if response.css('span#proshfileBt a::text') else  \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+                            if response.css('span#profileBt') else  \
                             response.css('span.rich_media_meta_text::text').get().strip()
 
 
@@ -635,6 +635,7 @@ class  OilCubicSpider(scrapy.Spider):
             result = self.session.query(WeiXinOilCubic) \
                 .filter(or_(WeiXinOilCubic.url == url,WeiXinOilCubic.title == title)) \
                 .first()
+
             if not result:
                 yield SeleniumRequest(url=url,
                                       callback=self.parse,
@@ -645,12 +646,13 @@ class  OilCubicSpider(scrapy.Spider):
 
     def parse(self, response):
         item = OilCubicItem()
-
+        from scrapy.shell import inspect_response
+        inspect_response(response,self)
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-                            if response.css('span#proshfileBt a::text') else  \
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+                            if response.css('span#profileBt a::text') else  \
                             response.css('span.rich_media_meta_text::text').get().strip()
 
 
@@ -712,8 +714,9 @@ class  OilLinkSpider(scrapy.Spider):
         driver = response.meta.get('driver')
         time_element = driver.find_element_by_id('publish_time')
         item['url'] = response.url
-        item['author'] = response.css('span#proshfileBt a::text').get().strip() \
-                            if response.css('span#proshfileBt a::text') else  \
+
+        item['author'] = response.css('span#profileBt a::text').get().strip() \
+                            if response.css('span#profileBt a::text') else  \
                             response.css('span.rich_media_meta_text::text').get().strip()
 
 
